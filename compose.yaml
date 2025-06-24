@@ -1,0 +1,27 @@
+services:
+  kaggle:
+    container_name: kaggle
+    build: .
+    ports:
+      - 8080:8080
+    volumes:
+      - ./src:/home/src
+      - ./data:/home/data
+      - ./notebook:/home/notebook
+    tty: true
+    working_dir: /home
+    command: >
+      jupyter notebook
+        --port=8080
+        --ip=0.0.0.0
+        --allow-root
+        --NotebookApp.token=''
+        --NotebookApp.password=''
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
